@@ -7,12 +7,12 @@ import requests
 from icalendar import Calendar
 from datetime import datetime, timezone, timedelta
 import traceback
-from datetime import datetime, timedelta
 import json
+import os
 
 # Configuration
-DATABASE_URL = 'postgresql://avnadmin:AVNS_IqbWSZXqhgYT7ml5BFN@agendaprime-agendaprime.e.aivencloud.com:10817/defaultdb?sslmode=require'
-SECRET_KEY = 'change-this-secret-in-production'
+DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost/agendaprime')
+SECRET_KEY = os.getenv('SECRET_KEY', 'change-this-secret-in-production')
 FETCH_TIMEOUT = 10
 
 # Initialisation Flask
