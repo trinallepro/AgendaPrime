@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Mon Agenda{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Mon Agenda</h2>
+  <div id="calendar" class="mt-4"></div>
+
+  <!-- Affiche les événements pour déboguer -->
+
+
+  <!-- Passe les événements au script JavaScript -->
+  <script id="events-data" type="application/json">
+    {{ events|safe }}
+  </script>
+  <script src="{{ url_for('static', filename='agenda.js') }}"></script>
+</div>
+{% endblock %}

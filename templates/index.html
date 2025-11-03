@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center bg-light p-5 rounded">
+  <h1 class="display-4">Agenda Prime</h1>
+  <p class="lead">
+    Ce site te permet d'importer et de visualiser tes emplois du temps(ÉcoleDirecte)
+  </p>
+  <hr class="my-4">
+  <p>
+    Inscris-toi et ajoute tes agendas pour commencer.
+  </p>
+  {% if not user %}
+  <a class="btn btn-primary btn-lg" href="{{ url_for('register') }}" role="button">S'inscrire</a>
+  <a class="btn btn-outline-secondary btn-lg ms-2" href="{{ url_for('login') }}" role="button">Se connecter</a>
+  {% else %}
+  <a class="btn btn-primary btn-lg" href="{{ url_for('dashboard') }}" role="button">Aller au Dashboard</a>
+  {% endif %}
+</div>
+{% endblock %}

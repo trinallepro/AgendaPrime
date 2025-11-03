@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Inscription{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h2 class="text-center">Inscription</h2>
+      </div>
+      <div class="card-body">
+        <form method="post">
+          <div class="mb-3">
+            <label for="username" class="form-label">Nom d'utilisateur</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Mot de passe</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+          </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">S'inscrire</button>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer text-center">
+        <p>Déjà un compte ? <a href="{{ url_for('login') }}">Se connecter</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

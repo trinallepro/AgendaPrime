@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="row">
+  <!-- Tutoriel pour ÉcoleDirecte -->
+  <div class="col-md-12 mb-4">
+    <div class="card">
+      <div class="card-header bg-info text-white">
+        <h5 class="mb-0">📅 Comment ajouter mon emploi du temps depuis ÉcoleDirecte ?</h5>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-light">
+          <p>
+            Suis ces étapes pour exporter ton emploi du temps depuis ÉcoleDirecte et l'importer automatiquement dans ton agenda :
+          </p>
+          <ol>
+            <li>
+              <strong>Connecte-toi</strong> à ton compte <a href="https://www.ecoledirecte.com" target="_blank" class="alert-link">ÉcoleDirecte</a>.
+            </li>
+            <li>
+              Dans le menu de gauche, sélectionne <strong>"Emploi du temps"</strong>.
+            </li>
+            <li>
+              En haut à gauche de ton emploi du temps, clique sur le bouton <strong>"Partager mon emploi du temps"</strong>
+              <div class="text-center my-3">
+                <img src="/static/image.png"
+                     alt="Capture d'écran : Bouton Partager mon emploi du temps sur ÉcoleDirecte"
+                     class="img-fluid rounded"
+                     style="max-height: 400px;">
+                <small class="text-muted d-block mt-1">Bouton "Partager mon emploi du temps" en haut à gauche.</small>
+              </div>
+            </li>
+            <li>
+              Copie <strong>l'URL du lien iCal</strong> qui s'affiche.
+              <div class="alert alert-secondary mt-2">
+                <strong>Exemple de lien iCal :</strong><br>
+                <code>https://api.ecoledirecte.com/v3/ical/E/4577/576b7468613274584e4859775533646a52326c3561f7a656c643563446c345547316a62305a33.ics</code>
+              </div>
+            </li>
+            <li>
+              Retourne sur cette page, colle l'URL dans le champ <strong>"URL iCal"</strong> ci-dessous,
+              donne un nom à ton agenda (ex: "Mon EDT ÉcoleDirecte"), et clique sur <strong>"Ajouter"</strong>.
+            </li>
+          </ol>
+          <div class="alert alert-warning mt-3">
+            ⚠️ <strong>Attention</strong> :
+            <ul class="mb-0">
+              <li>Ton lien iCal est <strong>personnel</strong> et peut contenir des informations sensibles. Ne le partage pas publiquement.</li>
+              <li>Si l'import ne fonctionne pas, assure-toi d'être connecté(e) à ÉcoleDirecte dans un autre onglet de ton navigateur.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+  <!-- Formulaire d'ajout d'agenda (existante) -->
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Ajouter un agenda</h5>
+      </div>
+      <div class="card-body">
+        <form method="post" action="{{ url_for('add_ical') }}">
+          <div class="mb-3">
+            <label for="label" class="form-label">Nom de l'agenda</label>
+            <input type="text" class="form-control" id="label" name="label" placeholder="Mon emploi du temps" value="Mon emploi du temps">
+          </div>
+          <div class="mb-3">
+            <label for="url" class="form-label">URL iCal</label>
+            <input type="url" class="form-control" id="url" name="url" placeholder="https://..." required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Ajouter</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reste de ton code existant -->
+  <div class="col-md-8">
+    <h2>Mes Agendas</h2>
+    {% if icals %}
+    <div class="list-group mb-4">
+      {% for ical in icals %}
+      <div class="list-group-item">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="mb-1">{{ ical.label }}</h5>
+            <small class="text-muted">{{ ical.url }}</small><br>
+            <small class="text-muted">
+              Dernière importation :
+              {% if ical.last_fetched %}
+              {{ ical.last_fetched.strftime('%d/%m/%Y %H:%M') }}
+              {% else %}
+              Jamais
+              {% endif %}
+            </small>
+          </div>
+          <div>
+            <form class="d-inline" method="post" action="{{ url_for('fetch_ical', source_id=ical.id) }}">
+              <button type="submit" class="btn btn-sm btn-outline-primary me-2">Importer</button>
+            </form>
+            <form class="d-inline" method="post" action="{{ url_for('delete_ical', source_id=ical.id) }}">
+              <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">Aucun agenda ajouté.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
